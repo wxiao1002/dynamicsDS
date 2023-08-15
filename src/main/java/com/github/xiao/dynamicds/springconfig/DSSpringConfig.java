@@ -20,8 +20,7 @@ public class DSSpringConfig {
     public Advisor dynamicDatasourceAnnotationAdvisor() {
 
         DsAnnotationInterceptor interceptor = new DsAnnotationInterceptor();
-        DynamicDataSourceAnnotationAdvisor advisor = new DynamicDataSourceAnnotationAdvisor(interceptor, DS.class);
-        return advisor;
+        return new DynamicDataSourceAnnotationAdvisor(interceptor, DS.class);
     }
 
     @Bean
