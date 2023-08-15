@@ -1,4 +1,4 @@
-package com.github.xiao.dynamicds;
+package com.github.xiao.dynamicds.util;
 
 import org.springframework.core.NamedThreadLocal;
 import org.springframework.util.StringUtils;
@@ -16,6 +16,10 @@ public final class DynamicDataSourceCtxHolder {
     private DynamicDataSourceCtxHolder() {
     }
 
+
+    /**
+     * 服务嵌套问题解决
+     */
     public static final ThreadLocal<Deque<String>> LOOKUP_KEY_HOLDER = new NamedThreadLocal<Deque<String>>("dynamic-datasource"){
         @Override
         protected Deque<String> initialValue() {
@@ -26,7 +30,6 @@ public final class DynamicDataSourceCtxHolder {
 
     /**
      * 获得当前线程数据源
-     *
      * @return 数据源名称
      */
     public static String peek() {
@@ -35,10 +38,6 @@ public final class DynamicDataSourceCtxHolder {
 
     /**
      * 设置当前线程数据源
-     * <p>
-     * 如非必要不要手动调用，调用后确保最终清除
-     * </p>
-     *
      * @param ds 数据源名称
      * @return 数据源名称
      */
@@ -50,9 +49,6 @@ public final class DynamicDataSourceCtxHolder {
 
     /**
      * 清空当前线程数据源
-     * <p>
-     * 如果当前线程是连续切换数据源 只会移除掉当前线程的数据源名称
-     * </p>
      */
     public static void poll() {
         Deque<String> deque = LOOKUP_KEY_HOLDER.get();
@@ -63,12 +59,9 @@ public final class DynamicDataSourceCtxHolder {
     }
 
     /**
-     * 强制清空本地线程
-     * <p>
-     * 防止内存泄漏，如手动调用了push可调用此方法确保清除
-     * </p>
+     * 清空
      */
-    public static void clear() {
+    public static void remove() {
         LOOKUP_KEY_HOLDER.remove();
     }
 
